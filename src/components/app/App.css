@@ -1,0 +1,122 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+:focus,
+:active {
+  outline: none;
+}
+a:focus,
+a:active {
+  outline: none;
+}
+nav,
+footer,
+header,
+aside {
+  display: block;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  line-height: 1;
+  font-family: Inter;
+  font-size: 14px;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+input::-ms-clear {
+  display: none;
+}
+button {
+  cursor: pointer;
+}
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+a,
+a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+ul li {
+  list-style: none;
+}
+img {
+  vertical-align: top;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+body {
+  width: 1440px;
+  height: 1147px;
+  margin: 0 auto 0 auto;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #d9d9d9;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.pagination {
+  display: table;
+  margin: 0 auto 20px auto;
+  padding: 20px 0 0 0;
+}
+
+.wrapper {
+  width: 1010px;
+  height: 100%;
+  margin: 0 auto 0 auto;
+  background-color: #ffffff;
+}
+
+:where(.css-dev-only-do-not-override-2rgkd4).ant-tabs-top > .ant-tabs-nav::before {
+  width: 109px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ant-alert {
+  margin: 20px;
+}
+
+@media (max-width: 1024px) {
+  body {
+    width: 420px;
+  }
+
+  .pagination {
+    margin-left: 75px;
+  }
+}

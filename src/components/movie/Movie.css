@@ -1,0 +1,126 @@
+.movie {
+  position: relative;
+  display: grid;
+  grid-template-columns: 45% 55%;
+  margin: 21px 0 18px 37px;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
+  font-family: Inter;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: left;
+  padding-top: 6px;
+}
+
+.movie-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.poster {
+  display: block;
+  width: 183px;
+  height: 100%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.description {
+  width: 228px;
+  height: 129px;
+}
+
+.text {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0px;
+  overflow: hidden;
+  white-space: wrap;
+  max-height: 11em;
+}
+
+.date {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: rgba(130, 126, 126, 1);
+}
+
+.movie-main {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+
+.movie-rate {
+  position: absolute;
+  bottom: 5px;
+  font-size: 18px;
+  align-self: start;
+}
+
+.ant-rate .ant-rate-star:not(:last-child) {
+  margin-inline-end: 4px;
+}
+
+.img {
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .movie {
+    width: 387px;
+    align-content: space-between;
+    margin-left: 20px;
+  }
+
+  .movie-header {
+    padding-left: 90px;
+    min-height: 130px;
+  }
+
+  .poster {
+    margin: 15px;
+    min-width: 0;
+    position: absolute;
+    width: 60px;
+    height: 91px;
+  }
+
+  .movie-rate {
+    left: 150px;
+    bottom: 20px;
+  }
+
+  .ant-tabs-nav-list {
+    margin-left: -550px;
+  }
+
+  .date {
+    position: relative;
+    top: -89px;
+    left: 90px;
+  }
+
+  .genres {
+    position: relative;
+    top: -87px;
+    left: 87px;
+  }
+
+  .text {
+    position: relative;
+    top: -50px;
+    left: 19px;
+  }
+}

@@ -1,0 +1,28 @@
+.movie-rating {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  margin: 5px 5px 0 auto;
+  text-align: center;
+  line-height: 22px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+
+.movie-rating-number {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0px;
+  text-align: left;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 1024px) {
+  .movie-rating {
+    margin: 5px 5px 0 195px;
+  }
+}
