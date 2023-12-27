@@ -1,7 +1,8 @@
 .movies-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  width: 977px;
+  width: 990px;
+  padding-left: 0;
 }
 
 @media (max-width: 1024px) {

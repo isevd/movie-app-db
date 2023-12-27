@@ -1,11 +1,17 @@
 export default class MovieAppService {
-  API_BASE = 'https://api.themoviedb.org/3/';
-  API_KEY = 'b52e45e3f294c3fc4cd33a1f0c3279b5';
-  API_IMG = 'https://image.tmdb.org/t/p/original';
-  EMPTY_IMG = 'https://upload.wikimedia.org/wikipedia/commons/c/c2/No_image_poster.png';
+  urlMovie = new URL('https://api.themoviedb.org/3/');
+  apiKey = 'b52e45e3f294c3fc4cd33a1f0c3279b5';
+  options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization:
+        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNTJlNDVlM2YyOTRjM2ZjNGNkMzNhMWYwYzMyNzliNSIsInN1YiI6IjY1NmUwZTE3MDVhNTMzMDBjNjZhZTBlMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TTBPQZ98mOGo60oynBbjTruEbC0HIkODarwgZsHOwSo',
+    },
+  };
 
   getResource = async (url) => {
-    const link = `${this.API_BASE}${url}api_key=${this.API_KEY}`;
+    const link = `${this.urlMovie}${url}api_key=${this.apiKey}`;
     try {
       const res = await fetch(link);
       return await res.json();
@@ -15,7 +21,7 @@ export default class MovieAppService {
   };
 
   setResource = async (url, body) => {
-    const link = `${this.API_BASE}${url}api_key=${this.API_KEY}`;
+    const link = `${this.urlMovie}${url}api_key=${this.apiKey}`;
     try {
       await fetch(link, {
         method: 'POST',
@@ -27,32 +33,51 @@ export default class MovieAppService {
   };
 
   searchMoviesByName = async (movieName, page = 1) => {
-    const res = await this.getResource(`search/movie?query=${movieName}&page=${page}&`);
-    return res;
+    const url = new URL('search/movie?', this.urlMovie);
+    url.searchParams.set('query', movieName);
+    url.searchParams.set('page', page);
+    const response = await fetch(url, this.options);
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return await response.json();
   };
 
   getReturnMovies = async (page = 1) => {
-    return await this.getResource(`search/movie?query=return&page=${page}&`);
+    const url = new URL('search/movie?', this.urlMovie);
+    url.searchParams.set('query', 'return');
+    url.searchParams.set('page', page);
+    const response = await fetch(url, this.options);
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return await response.json();
   };
 
   getGenreMovieList = async () => {
-    return await this.getResource('genre/movie/list?');
+    const url = new URL('genre/movie/list', this.urlMovie);
+    const response = await fetch(url, this.options);
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    const data = await response.json();
+    return await data;
   };
 
   getGuestToken = async () => {
-    const res = await this.getResource('authentication/guest_session/new?');
-    if (!sessionStorage.getItem('guest_token')) {
-      sessionStorage.setItem('guest_token', res.guest_session_id);
+    if (!localStorage.getItem('guest_token')) {
+      const res = await this.getResource('authentication/guest_session/new?');
+      localStorage.setItem('guest_token', res.guest_session_id);
     }
   };
 
-  getRatedMovies = async (page) => {
-    return await this.getResource(`guest_session/${sessionStorage.getItem('guest_token')}/rated/movies?page=${page}&`);
+  getRatedMovies = async (page = 1) => {
+    return await this.getResource(`guest_session/${localStorage.getItem('guest_token')}/rated/movies?page=${page}&`);
   };
 
   guestRateMovie = async (movieId, value) => {
     const data = new FormData();
     data.append('value', value);
-    await this.setResource(`movie/${movieId}/rating?guest_session_id=${sessionStorage.getItem('guest_token')}&`, data);
+    await this.setResource(`movie/${movieId}/rating?guest_session_id=${localStorage.getItem('guest_token')}&`, data);
   };
 }

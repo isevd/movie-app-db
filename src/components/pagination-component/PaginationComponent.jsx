@@ -1,9 +1,6 @@
 import { Pagination } from 'antd';
 
 const PaginationComponent = ({ totalMovies, page, onChange }) => {
-  const maxTotalMovies = 100;
-  const limitedTotalMovies = Math.min(totalMovies, maxTotalMovies);
-
   return (
     <>
       {totalMovies > 0 ? (
@@ -13,7 +10,7 @@ const PaginationComponent = ({ totalMovies, page, onChange }) => {
           pageSize={20}
           onChange={(e) => onChange(e)}
           current={page}
-          total={limitedTotalMovies}
+          total={totalMovies}
           showSizeChanger={false}
         />
       ) : null}
