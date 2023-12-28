@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Movie from '../movie/Movie.jsx';
+
 import './MoviesList.css';
 
 const MoviesList = ({ movies, rateMovie }) => {

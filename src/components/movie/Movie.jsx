@@ -3,7 +3,6 @@ import { Rate, Spin } from 'antd';
 import { format } from 'date-fns';
 import './Movie.css';
 
-import MovieAppService from '../../services/MovieAppService';
 import MovieRating from '../movie-rating/MovieRating';
 import MovieGenres from '../movie-genres/MovieGenres';
 
@@ -11,8 +10,6 @@ export default class Movie extends Component {
   state = {
     loaded: false,
   };
-
-  movieAppService = new MovieAppService();
 
   getTruncText = (text, maxLength) => {
     let result = text;
@@ -43,19 +40,18 @@ export default class Movie extends Component {
     const { title, posterPath, releaseDate, overview, rating, rateMovie, genreIds, voteAverage } = this.props;
 
     const posterImage = posterPath
-      ? `https://image.tmdb.org/t/p/w500${posterPath}`
-      : `${this.movieAppService.EMPTY_IMG}`;
+      ? `https://image.tmdb.org/t/p/original${posterPath}`
+      : 'https://upload.wikimedia.org/wikipedia/commons/c/c2/No_image_poster.png';
 
     const overView = overview ? this.getTruncText(overview, 200) : 'No description';
 
     return (
-      <div className="movie">
+      <div className="movie" style={this.state.loaded ? {} : { display: 'none' }}>
         {!this.state.loaded && <Spin size="large" style={{ position: 'absolute', top: '50%', left: '50%' }} />}
         <img
           src={posterImage}
           alt="poster"
           className="poster"
-          style={this.state.loaded ? {} : { display: 'none' }}
           onError={() => this.setState({ loaded: true })}
           onLoad={() => this.setState({ loaded: true })}
         />

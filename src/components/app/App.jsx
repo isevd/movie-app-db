@@ -1,9 +1,8 @@
 import { Component } from 'react';
-import { Spin, Tabs } from 'antd';
+import { Tabs } from 'antd';
 import { debounce } from 'lodash';
-import { Offline, Online } from 'react-detect-offline';
 
-import MovieGenresContext from '../context/movie-genres-context/MovieGenresContext';
+import MovieGenresContext from '../../context/movie-genres-context/MovieGenresContext';
 import MovieAppService from '../../services/MovieAppService';
 import MoviesList from '../movies-list/MoviesList';
 import ComponentState from '../component-state/ComponentState';
@@ -12,31 +11,35 @@ import PaginationComponent from '../pagination-component/PaginationComponent';
 
 import './App.css';
 
-const movieAppService = new MovieAppService();
-
 export default class App extends Component {
-  state = {
-    movies: [],
-    ratedMovies: [],
-    genres: [],
-    searchState: {
-      loading: false,
-      error: false,
-      emptySearch: false,
-    },
-    ratedState: {
-      loading: false,
-      error: false,
-    },
-    searchValue: '',
-    page: 1,
-    totalMovies: 0,
-    totalRatedMovies: 0,
-    ratedPage: 1,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      movies: [],
+      ratedMovies: [],
+      genres: [],
+      searchState: {
+        loading: false,
+        error: false,
+        emptySearch: false,
+      },
+      ratedState: {
+        loading: false,
+        error: false,
+      },
+      searchValue: '',
+      page: 1,
+      totalMovies: 0,
+      totalRatedMovies: 0,
+      ratedPage: 1,
+    };
+
+    this.movieAppService = new MovieAppService();
+  }
 
   componentDidMount() {
-    movieAppService
+    this.movieAppService
       .getGuestToken()
       .then(() => {
         this.getReturnMovies();
@@ -79,7 +82,7 @@ export default class App extends Component {
       this.setState({ searchState: { loading: true, error: false, emptySearch: false } });
       this.getReturnMovies();
     } else {
-      movieAppService
+      this.movieAppService
         .searchMoviesByName(`${movieName}`, page)
         .then((el) => {
           this.setMovies(el);
@@ -98,7 +101,7 @@ export default class App extends Component {
   };
 
   getReturnMovies = (page) => {
-    movieAppService
+    this.movieAppService
       .getReturnMovies(page)
       .then((el) => {
         this.setMovies(el);
@@ -111,7 +114,7 @@ export default class App extends Component {
   updateRatedMovies = async (page = 1) => {
     try {
       this.setState({ ratedState: { loading: true, error: false } });
-      const data = await movieAppService.getRatedMovies(page);
+      const data = await this.movieAppService.getRatedMovies(page);
       this.setState({
         ratedMovies: data.results,
         totalRatedMovies: data.total_results,
@@ -123,18 +126,18 @@ export default class App extends Component {
   };
 
   getGenres() {
-    movieAppService.getGenreMovieList().then((el) => {
-      this.setState({ genres: el.genres });
-    });
+    this.movieAppService
+      .getGenreMovieList()
+      .then((el) => {
+        this.setState({ genres: el.genres });
+      })
+      .catch(() => {
+        this.onError();
+      });
   }
 
   setRatedMovies = (movies, ratedMovies) => {
-    return movies.map((el) => {
-      for (let i of ratedMovies) {
-        if (el.id === i.id) return i;
-      }
-      return el;
-    });
+    return movies.map((el) => ratedMovies.find((i) => el.id === i.id) || el);
   };
 
   debouncedSearch = debounce(() => {
@@ -166,7 +169,7 @@ export default class App extends Component {
 
   rateMovie = async (id, rating) => {
     try {
-      await movieAppService.guestRateMovie(id, rating);
+      await this.movieAppService.guestRateMovie(id, rating);
       this.setState(({ movies }) => {
         return {
           movies: movies.map((el) => (el.id === id ? { ...el, rating: rating } : el)),
@@ -174,7 +177,7 @@ export default class App extends Component {
       });
     } catch {
       if (!sessionStorage.getItem('guest_token')) {
-        await movieAppService.getGuestToken();
+        await this.movieAppService.getGuestToken();
         await this.rateMovie();
       }
     }
@@ -205,6 +208,7 @@ export default class App extends Component {
       ratedState,
       searchValue,
     } = this.state;
+
     const searchTab = (
       <>
         <MovieSearchForm searchValue={searchValue} setSearchValue={this.handleSearch} />
@@ -231,21 +235,16 @@ export default class App extends Component {
 
     return (
       <div className="wrapper">
-        <Online>
-          <MovieGenresContext.Provider value={genres}>
-            <Tabs
-              className="switch"
-              centered
-              items={items}
-              onTabClick={(key) => {
-                if (key === 'item-2') this.updateRatedMovies();
-              }}
-            />
-          </MovieGenresContext.Provider>
-        </Online>
-        <Offline>
-          <Spin style={{ position: 'fixed', top: '50%', left: '50%' }} size="large" />
-        </Offline>
+        <MovieGenresContext.Provider value={genres}>
+          <Tabs
+            className="switch"
+            centered
+            items={items}
+            onTabClick={(key) => {
+              if (key === 'item-2') this.updateRatedMovies();
+            }}
+          />
+        </MovieGenresContext.Provider>
       </div>
     );
   }

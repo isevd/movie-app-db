@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["antd", "linebreak"]
+  "cSpell.words": ["antd", "linebreak"],
+  "git.enabled": false,
 }

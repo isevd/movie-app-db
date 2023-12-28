@@ -3,7 +3,7 @@ import { Tag } from 'antd';
 
 import './MovieGenres.css';
 
-import MovieGenresContext from '../context/movie-genres-context/MovieGenresContext';
+import MovieGenresContext from '../../context/movie-genres-context/MovieGenresContext';
 
 export default class MovieGenres extends Component {
   static contextType = MovieGenresContext;
