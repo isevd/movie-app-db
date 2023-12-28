@@ -13,22 +13,28 @@ export default class MovieAppService {
   getResource = async (url) => {
     const link = `${this.urlMovie}${url}api_key=${this.apiKey}`;
     try {
-      const res = await fetch(link);
-      return await res.json();
+      const response = await fetch(link);
+      if (!response.ok) {
+        throw new Error(`Could not fetch ${link}`);
+      }
+      return await response.json();
     } catch (e) {
-      throw new Error(`Could not fetch ${url}, received ${e.status}`);
+      alert(`Could not fetch ${url}, received ${e}`);
     }
   };
 
   setResource = async (url, body) => {
-    const link = `${this.urlMovie}${url}api_key=${this.apiKey}`;
+    const link = `${this.urlMovie}${url}api_key=${this.apiKey}asfsa`;
     try {
-      await fetch(link, {
+      const response = await fetch(link, {
         method: 'POST',
         body: body,
       });
+      if (!response.ok) {
+        throw new Error(`Could not fetch ${link}`);
+      }
     } catch (e) {
-      throw new Error(`Could not fetch ${url}, received ${e.status}`);
+      alert(`Could not fetch ${url}, received ${e}`);
     }
   };
 

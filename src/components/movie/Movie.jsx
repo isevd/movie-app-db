@@ -46,13 +46,12 @@ export default class Movie extends Component {
     const overView = overview ? this.getTruncText(overview, 200) : 'No description';
 
     return (
-      <div className="movie">
+      <div className="movie" style={this.state.loaded ? {} : { display: 'none' }}>
         {!this.state.loaded && <Spin size="large" style={{ position: 'absolute', top: '50%', left: '50%' }} />}
         <img
           src={posterImage}
           alt="poster"
           className="poster"
-          style={this.state.loaded ? {} : { display: 'none' }}
           onError={() => this.setState({ loaded: true })}
           onLoad={() => this.setState({ loaded: true })}
         />
