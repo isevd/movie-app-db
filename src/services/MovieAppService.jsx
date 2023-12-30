@@ -18,8 +18,8 @@ export default class MovieAppService {
         throw new Error(`Could not fetch ${link}`);
       }
       return await response.json();
-    } catch (e) {
-      alert(`Could not fetch ${url}, received ${e}`);
+    } catch (error) {
+      throw new Error(error);
     }
   };
 
@@ -33,8 +33,9 @@ export default class MovieAppService {
       if (!response.ok) {
         throw new Error(`Could not fetch ${link}`);
       }
-    } catch (e) {
-      alert(`Could not fetch ${url}, received ${e}`);
+      return await response.json();
+    } catch (error) {
+      throw new Error(error);
     }
   };
 
@@ -78,12 +79,20 @@ export default class MovieAppService {
   };
 
   getRatedMovies = async (page = 1) => {
-    return await this.getResource(`guest_session/${localStorage.getItem('guest_token')}/rated/movies?page=${page}&`);
+    try {
+      return await this.getResource(`guest_session/${localStorage.getItem('guest_token')}/rated/movies?page=${page}&`);
+    } catch (error) {
+      throw new Error(error);
+    }
   };
 
   guestRateMovie = async (movieId, value) => {
-    const data = new FormData();
-    data.append('value', value);
-    await this.setResource(`movie/${movieId}/rating?guest_session_id=${localStorage.getItem('guest_token')}&`, data);
+    try {
+      const data = new FormData();
+      data.append('value', value);
+      await this.setResource(`movie/${movieId}/rating?guest_session_id=${localStorage.getItem('guest_token')}&`, data);
+    } catch (error) {
+      throw new Error(error);
+    }
   };
 }

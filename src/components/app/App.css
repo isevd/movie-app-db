@@ -27,7 +27,7 @@ body {
 }
 
 .ant-alert {
-  margin: 20px;
+  margin: 20px 15px 25px 40px;
 }
 
 @media (max-width: 1024px) {

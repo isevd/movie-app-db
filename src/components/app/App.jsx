@@ -23,6 +23,7 @@ export default class App extends Component {
         loading: false,
         error: false,
         emptySearch: false,
+        fetchError: false,
       },
       ratedState: {
         loading: false,
@@ -50,15 +51,19 @@ export default class App extends Component {
   }
 
   onMoviesLoaded() {
-    this.setState({ searchState: { loading: false, error: false, emptySearch: false } });
+    this.setState({ searchState: { loading: false, error: false, emptySearch: false, fetchError: false } });
   }
 
   onError() {
-    this.setState({ searchState: { loading: false, error: true, emptySearch: false } });
+    this.setState({ searchState: { loading: false, error: true, emptySearch: false, fetchError: false } });
   }
 
   onEmptySearch() {
-    this.setState({ searchState: { loading: false, error: false, emptySearch: true } });
+    this.setState({ searchState: { loading: false, error: false, emptySearch: true, fetchError: false } });
+  }
+
+  onFetchError() {
+    this.setState({ searchState: { loading: false, error: false, emptySearch: false, fetchError: true } });
   }
 
   setMovies(movies) {
@@ -121,7 +126,7 @@ export default class App extends Component {
         ratedState: { loading: false, error: false },
       });
     } catch {
-      this.setState({ ratedState: { loading: false, error: true } });
+      this.onError();
     }
   };
 
@@ -175,11 +180,11 @@ export default class App extends Component {
           movies: movies.map((el) => (el.id === id ? { ...el, rating: rating } : el)),
         };
       });
-    } catch {
       if (!sessionStorage.getItem('guest_token')) {
         await this.movieAppService.getGuestToken();
-        await this.rateMovie();
       }
+    } catch {
+      this.onFetchError();
     }
   };
 
@@ -214,8 +219,8 @@ export default class App extends Component {
         <MovieSearchForm searchValue={searchValue} setSearchValue={this.handleSearch} />
         <ComponentState componentState={searchState}>
           <MoviesList rateMovie={this.rateMovie} movies={movies} />
+          <PaginationComponent totalMovies={totalMovies} page={page} onChange={this.setPage} />
         </ComponentState>
-        <PaginationComponent totalMovies={totalMovies} page={page} onChange={this.setPage} />
       </>
     );
 
